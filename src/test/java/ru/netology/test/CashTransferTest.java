@@ -2,7 +2,6 @@ package ru.netology.test;
 
 import ru.netology.data.DataHelper;
 import ru.netology.page.LoginPage;
-import ru.netology.page.TransferCashPage;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -68,19 +67,14 @@ public class CashTransferTest {
     void shouldTransferNegativeBalance() {
 
         int amount = 50000;
-        var cardInfoFirst = DataHelper.getFirstCardNumber();
-        var cardInfoSecond = DataHelper.getSecondCardNumber();
+        var cardInfo = DataHelper.getFirstCardNumber();
 
         var dashboard = new DashboardPage();
-        dashboard.changeCard(1).shouldCashInfo(cardInfoFirst, amount);
+
+        dashboard.changeCard(1).shouldCashInfo(cardInfo, amount);
         int finalBalanceFirstCard = dashboard.getCardBalance("0");
         int finalBalanceSecondCard = dashboard.getCardBalance("1");
 
-        var transfer = new TransferCashPage();
-        if (finalBalanceFirstCard < 0) {
-            transfer.noNegativeBalance(cardInfoFirst);
-        } else if (finalBalanceSecondCard < 0) {
-            transfer.noNegativeBalance(cardInfoSecond);
-        }
+        assertTrue(finalBalanceFirstCard > 0 && finalBalanceSecondCard > 0);
     }
 }
